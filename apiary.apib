@@ -1,0 +1,311 @@
+FORMAT: 1A
+ 
+# APS Lite Connector
+ 
+APS Lite connector API integrates your service into the Odin Service Automation ecosystem.
+ 
+# Connector API [/]
+ 
+This API is only used to check overall endpoint availability.
+ 
+## Health check [GET]
+ 
++ Response 200 (application/json)
+ 
+        { "status": "ok" }
+
+## Subscription [/subscription]
+
+Resources related to the Subscription API.
+
+### Create a New Subscription [POST /subscription]
+
+Create new subscription. 
+
+On input APS representation of application subscription resource provided.
+
+On output appication update for the representation may be sent (i.e. **customId** attribute set).
+
++ Attributes:
+    + **aps** - technical node with resource identifier, type and other information
+        + **id** - subscription resource identifier
+        + **type** - APS resource type
+    + **subscription** - link to Odin Automation subscription resource
+    + **account** - link to Odin Automation account resource
+    + **globals** - link to Application global configuration resource
+    + `<counter>` - (muptiple) structure with defined counter limits, like { "limit": 12345 } 
+
++ Valid responses:
+    + **200 OK** - new resource representation can be returned by connector
+    + **201 Created** - same as 200 OK
+    + **202 Accepted** - go to asynchroneous phase of provisioning, same representation as in 200 OK
+    + **204 No content** - no data returned, operation succeed
+
++ Request (application/json)
+
+    + Headers
+    
+            APS-Instance-ID: 74f752fb-6150-44d2-8c98-e987882411e8
+            APS-Request-Phase: sync
+
+    + Body
+
+            {
+                "aps": {
+                    "type": "http://myservice.com/vps/1.0",
+                    "id": "87504a7e-4617-4379-91ee-6b069009816c",
+                    "status": "aps:provisioning",
+                    "revision": 2,
+                    "modified": "2016-03-25T14:25:57Z",
+                    "subscription": "692469ff-0b79-47fc-a363-37f079d08a15",
+                    "package": {
+                      "id": "c6c16a96-18c5-4090-8e99-c76358525571",
+                      "href": "/aps/2/packages/c6c16a96-18c5-4090-8e99-c76358525571"
+                    }    
+                },
+
+                "oaSubscription": {
+                    "aps": { 
+                        "link": "strong",
+                        "id": "692469ff-0b79-47fc-a363-37f079d08a15",
+                        "href": "/aps/2/resources/692469ff-0b79-47fc-a363-37f079d08a15"
+                    }
+                },
+
+                "oaAccount": {
+                    "aps": { 
+                        "link": "strong",
+                        "id": "dbcd6870-2f94-4e44-a766-0dae91e16e76",
+                        "href": "/aps/2/resources/dbcd6870-2f94-4e44-a766-0dae91e16e76"
+                    }
+                },
+                
+                 "globals": {
+                    "aps": {
+                        "link": "strong",
+                        "href": "/aps/2/resources/93a51b5b-0331-4eec-9e1e-8d9736cc6220",
+                        "id": "93a51b5b-0331-4eec-9e1e-8d9736cc6220"
+                    }
+                },
+                
+                "graceful_lions_6": {
+                        "limit": 20
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+            "customId": "67f5f4c7-11f5-4e20-9306-10d99aeb56ac"
+        }
+
++ Response 204
+
+
+### Get Application Resource Usage [GET /subscription/{id}]
+
+Retrieve usage of the subscription counters. Application should return updated counters (if any). Application may update other properties.
+
+
++ Parameters
+
+    + id (required, string) - UUID of application subscription resource (same as sent in aps.id on POST)
+
++ Request
+
+    + Headers
+
+            APS-Instance-ID: 74f752fb-6150-44d2-8c98-e987882411e8
+
+
++ Response 200 (application/json)
+
+        {
+        }
+
+### Update Application Resource Limits [PUT /subscription/{id}]
+
+Update application resource limits, typically happends as a result of subscription reconfiguration in OSA.
+
+
++ Parameters
+
+    + id (required, string) - UUID of application subscription resource (same as sent in aps.id on POST)
+
++ Request
+
+    + Headers
+
+            APS-Instance-ID: 74f752fb-6150-44d2-8c98-e987882411e8
+
+
++ Response 200 (application/json)
+
+        {
+        }
+
+
+### Suspend Subscription [PUT /subscription/{id}/disable]
+
+Suspend subscription.
+
+
++ Parameters
+
+    + id (required, string) - UUID of application subscription resource (same as sent in aps.id on POST)
+
++ Request
+
+    + Headers
+
+            APS-Instance-ID: 74f752fb-6150-44d2-8c98-e987882411e8
+
+
++ Response 200 (application/json)
+
+        {
+        }
+
+
+### Resume Subscription [PUT /subscription/{id}/enable]
+
+Resume subscription.
+
+
++ Parameters
+
+    + id (required, string) - UUID of application subscription resource (same as sent in aps.id on POST)
+
++ Request
+
+    + Headers
+
+            APS-Instance-ID: 74f752fb-6150-44d2-8c98-e987882411e8
+
+
++ Response 200 (application/json)
+
+        {
+        }
+
+
+### Login to Application [GET /subscription/{id}/adminlogin]
+
+Login user as administrator to service 
+
++ Parameters
+    + id (required, string) - UUID of subscription resource
+
++ Response 200 (text/plain)
+
+        "http://www.odin.com"
+
+## Application [/app]
+
+Resources related to the application installation on particular Odin Automation. 
+
+### New Partner install application [POST /app]
+
+Create new application instance, this happened when new partner with Odin Automation connected to application.
+In aps.id there will be identifier of application resource in UUID format.
+
++ Request (application/json)
+
+    + Headers
+
+            APS-Instance-ID: 74f752fb-6150-44d2-8c98-e987882411e8
+            APS-Request-Phase: sync
+    
+    + Body
+
+            {
+                "aps": {
+                    "type": "http://www.odin.com/sweeft/sample/cheerful-panthers-10-87aa3068/globals/1.0",
+                    "id": "1061660e-32d7-4122-bcce-b4bea7fc3373",
+                    "status": "aps:provisioning",
+                    "revision": 3,
+                    "modified": "2016-04-01T12:18:14Z",
+                    "package": {
+                        "id": "b2682ba6-632e-41f3-90ea-2727d5d92285",
+                        "href": "/aps/2/packages/b2682ba6-632e-41f3-90ea-2727d5d92285"
+                    }
+                },
+                
+                "subscriptions": {
+                    "aps": {
+                        "link": "collection",
+                        "href": "/aps/2/resources/1061660e-32d7-4122-bcce-b4bea7fc3373/subscriptions"
+                    }
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+            "aps": {
+                    "type": "http://www.odin.com/sweeft/sample/cheerful-panthers-10-87aa3068/globals/1.0",
+                    "id": "1061660e-32d7-4122-bcce-b4bea7fc3373"
+            }
+        }
+
++ Response 204 
+
+### Application subscriptions collection populated [POST /app/{app}/subscriptions]
+
+This call notify application instance about appearing of new subscription resource, it is complementary to POST into /subscription collection and executed just before it.
+
+
++ Parameters
+
+    + app (required, string) - UUID of application that gets new subscription. It is safe to just ignore that call if application does not want to do anything special on subscriptions collection update.
+
++ Request (application/json)
+
+    + Headers
+
+            APS-Instance-ID: 74f752fb-6150-44d2-8c98-e987882411e8
+
+    + Body
+
+            {
+                "aps": {
+                    "type": "http://myservice.com/vps/1.0",
+                    "id": "87504a7e-4617-4379-91ee-6b069009816c"
+                }
+            }
+
++ Response 200 (application/json)
+
+### Subscription removed from application collection   [DELETE /app/{app}/subscriptions/{id}]
+
+This call notify application instance about disappearing of subscription resource, it is complementary to DELETE into /subscription/{id} collection and executed just after it.
+
++ Parameters
+
+    + app (required, string) - UUID of application that gets new subscription. It is safe to just ignore that call if application does not want to do anything special on subscriptions collection update.
+    + id (required, string) - UUID of subscription that gets unprovisioned. It is safe to just ignore that call if application does not want to do anything special on subscriptions collection update.
+
++ Request
+
+    + Headers
+
+            APS-Instance-ID: 74f752fb-6150-44d2-8c98-e987882411e8
+            APS-Request-Phase: sync
+
++ Response 200
+
+### Partner deinstall application [DELETE /app/{id}]
+
+Partner removes application instance from Odin Automation system.
+
++ Parameters
+    + id (guid, required) - application instance identifier, send in POST /app as aps.id
+
++ Request
+
+    + Headers
+
+            APS-Instance-ID: 74f752fb-6150-44d2-8c98-e987882411e8
+            APS-Request-Phase: sync
+
++ Response 200
