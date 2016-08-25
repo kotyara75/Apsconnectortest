@@ -130,7 +130,7 @@ Update application resource limits, typically happends as a result of subscripti
 
 + Parameters
 
-    + id (required, string) - UUID of application subscription resource (same as sent in aps.id on POST)
+    + id: 67f5f4c7-11f5-4e20-9306-10d99aeb56ac (required, string) - UUID of application subscription resource (same as sent in aps.id on POST)
 
 + Request
 
@@ -152,7 +152,7 @@ Suspend subscription.
 
 + Parameters
 
-    + id (required, string) - UUID of application subscription resource (same as sent in aps.id on POST)
+    + id: 67f5f4c7-11f5-4e20-9306-10d99aeb56ac (required, string) - UUID of application subscription resource (same as sent in aps.id on POST)
 
 + Request
 
@@ -174,7 +174,7 @@ Resume subscription.
 
 + Parameters
 
-    + id (required, string) - UUID of application subscription resource (same as sent in aps.id on POST)
+    + id: 67f5f4c7-11f5-4e20-9306-10d99aeb56ac (required, string) - UUID of application subscription resource (same as sent in aps.id on POST)
 
 + Request
 
@@ -194,7 +194,7 @@ Resume subscription.
 Login user as administrator to service 
 
 + Parameters
-    + id (required, string) - UUID of subscription resource
+    + id: 67f5f4c7-11f5-4e20-9306-10d99aeb56ac (required, string) - UUID of subscription resource
 
 + Response 200 (text/plain)
 
@@ -257,7 +257,7 @@ This call notify application instance about appearing of new subscription resour
 
 + Parameters
 
-    + app (required, string) - UUID of application that gets new subscription. It is safe to just ignore that call if application does not want to do anything special on subscriptions collection update.
+    + app: 1061660e-32d7-4122-bcce-b4bea7fc3373 (required, string) - UUID of application that gets new subscription. It is safe to just ignore that call if application does not want to do anything special on subscriptions collection update.
 
 + Request (application/json)
 
@@ -282,8 +282,8 @@ This call notify application instance about disappearing of subscription resourc
 
 + Parameters
 
-    + app (required, string) - UUID of application that gets new subscription. It is safe to just ignore that call if application does not want to do anything special on subscriptions collection update.
-    + id (required, string) - UUID of subscription that gets unprovisioned. It is safe to just ignore that call if application does not want to do anything special on subscriptions collection update.
+    + app: 1061660e-32d7-4122-bcce-b4bea7fc3373 (required, string) - UUID of application that gets new subscription. It is safe to just ignore that call if application does not want to do anything special on subscriptions collection update.
+    + id: 67f5f4c7-11f5-4e20-9306-10d99aeb56ac (required, string) - UUID of subscription that gets unprovisioned. It is safe to just ignore that call if application does not want to do anything special on subscriptions collection update.
 
 + Request
 
@@ -299,7 +299,7 @@ This call notify application instance about disappearing of subscription resourc
 Partner removes application instance from Odin Automation system.
 
 + Parameters
-    + id (guid, required) - application instance identifier, send in POST /app as aps.id
+    + id: 1061660e-32d7-4122-bcce-b4bea7fc3373 (guid, required) - application instance identifier, send in POST /app as aps.id
 
 + Request
 
